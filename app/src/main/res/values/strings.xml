@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CRUD_MVC</string>
+    <string name="title_splash">Nine Lives Project</string>
+    <string name="msg_success">Cadastro Feito com Sucesso</string>
+    <string name="msg_error_register">Erro no Cadastro</string>
+    <string name="msg_error_login">Informações não Compátiveis</string>
+    <string name="msg_error_empty">Preencha os Campos!</string>
+    <string name="title_login">Nome Legal Qualquer</string>
+    <string name="register_txt">Realize um Cadastro</string>
+    <string name="erro_msg_email">Preencha o campo Email obrigatório!</string>
+    <string name="erro_msg_apelido">Preencha o campo Apelido Obrigatório!</string>
+    <string name="erro_msg_senha">Preencha o campo senha corretamente!</string>
+</resources>
