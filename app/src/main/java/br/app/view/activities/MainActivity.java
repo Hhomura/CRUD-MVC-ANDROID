@@ -2,8 +2,11 @@ package br.app.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
     Button button;
     boolean check = false;
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     UsuarioController controller;
+    Usuario usuario;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(!verificacaoCampos()){
                     if(check){
-                        Usuario usuario = new Usuario(apelido.getText().toString(), email.getText().toString(), Integer.parseInt(senha.getText().toString()));
+                        usuario = new Usuario(apelido.getText().toString(), email.getText().toString(), Integer.parseInt(senha.getText().toString()));
                         if(cadastrarUsuario(usuario.getNome(), usuario.getEmail(), usuario.getSenha())){
                             zerarCampos();
                             Toast.makeText(MainActivity.this, R.string.msg_success, Toast.LENGTH_SHORT).show();
@@ -66,8 +73,14 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, R.string.msg_error_register, Toast.LENGTH_SHORT).show();
                         }
                     }else{
-                        Usuario usuario = new Usuario(apelido.getText().toString(), email.getText().toString(), Integer.parseInt(senha.getText().toString()));
-                        if(logar(usuario) != null){
+                        Usuario userLog = logar(email.getText().toString(), Integer.parseInt(senha.getText().toString()));
+                        if( userLog != null){
+
+                            editor.putString("usuario", userLog.getNome());
+                            editor.putString("email", userLog.getEmail());
+                            editor.putInt("senha", userLog.getSenha());
+                            editor.apply();
+
                             Intent i = new Intent(getApplicationContext(), Menu.class);
                                 startActivity(i);
                                 finish();
@@ -124,12 +137,11 @@ public class MainActivity extends AppCompatActivity {
     }
     public boolean cadastrarUsuario(String apelido, String email, int senha){
         Usuario usuario = new Usuario(apelido, email, senha);
-        Log.e("Usuario", usuario.getNome());
         return controller.cadastrarUsuario(usuario);
     }
 
-    public Usuario logar(Usuario user){
-        return controller.logar(user);
+    public Usuario logar(String email, int senha){
+        return controller.logar(email, senha);
     }
 
     public void init(){
@@ -141,6 +153,10 @@ public class MainActivity extends AppCompatActivity {
         txtRegister = findViewById(R.id.txt_register);
         controller = new UsuarioController();
         container = findViewById(R.id.container_group);
+
+
+        sharedPreferences = getSharedPreferences(String.valueOf(R.string.pref_key), MODE_PRIVATE);
+        editor = sharedPreferences.edit();
     }
 
 }

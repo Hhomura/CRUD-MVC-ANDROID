@@ -24,12 +24,21 @@ public class UsuarioController {
         }
         return null;
     }
-    public Usuario alterar(Usuario usuario){
+    public Usuario alterar(Usuario userOld, Usuario userAlter){
         List<Usuario> listaUsuarios = listar();
         for (int i = 0; i < listaUsuarios.size(); i++) {
-            if (listaUsuarios.get(i).getSenha()==usuario.getSenha()&&listaUsuarios.get(i).getEmail().equalsIgnoreCase(usuario.getEmail())){
-                Usuario usuarioAntigo = ConexaoBanco.getInstance().alterar(i, usuario);
-                return usuarioAntigo;
+            if (listaUsuarios.get(i).getSenha()==userOld.getSenha()&&listaUsuarios.get(i).getEmail().equalsIgnoreCase(userOld.getEmail())){
+                ConexaoBanco.getInstance().alterar(i, userAlter);
+            }
+        }
+        return null;
+    }
+
+    public Usuario getUser(Usuario user){
+        List<Usuario> listaUsuarios = listar();
+        for (int i = 0; i < listaUsuarios.size(); i++) {
+            if (listaUsuarios.get(i).getSenha()==user.getSenha()&&listaUsuarios.get(i).getEmail().equalsIgnoreCase(user.getEmail())){
+                return ConexaoBanco.getInstance().getUser(i);
             }
         }
         return null;
@@ -41,32 +50,19 @@ public class UsuarioController {
         return listaUsuarios;
     }
 
-    public Usuario logar(Usuario usuario){
+    public Usuario logar(String email, int senha){
         List<Usuario> listaUsuarios = listar();
         for (Usuario usuarioDoBanco:listaUsuarios) {
-            if (usuarioDoBanco.getSenha()==usuario.getSenha()&&usuarioDoBanco.getEmail().equalsIgnoreCase(usuario.getEmail())) {
+            if (usuarioDoBanco.getSenha()==senha &&usuarioDoBanco.getEmail().equalsIgnoreCase(email)) {
                 return usuarioDoBanco;
             }
         }
         return null;
     }
 
-    public boolean logarUsuario(Usuario usuario){
-        List<Usuario> listaUsuarios = listar();
-        for(Usuario user : listaUsuarios){
-            if(user == usuario){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public boolean cadastrarUsuario(Usuario user) {
         if (!user.getEmail().isEmpty() && !user.getNome().isEmpty() && user.getSenha() > -1 ) {
-            Log.e("Entrou", "Entrou");
             return ConexaoBanco.getInstance().salvar(user);
-        }else{
-            Log.e("Erro", "Erro");
         }
         return false;
     }

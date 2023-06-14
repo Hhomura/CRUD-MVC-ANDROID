@@ -1,5 +1,7 @@
 package br.app.view.model.dao;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +24,15 @@ public class ConexaoBanco {
         return bancoDeDados.remove(indice);
     }
 
-    public Usuario alterar (int indice, Usuario object){
-        return bancoDeDados.set(indice, object);
+    public void alterar (int indice, Usuario object){
+        bancoDeDados.set(indice, object);
     }
 
     public List<Usuario> listar(){
         return bancoDeDados;
+    }
+
+    public Usuario getUser(int indice){
+        return bancoDeDados.get(indice);
     }
 }
